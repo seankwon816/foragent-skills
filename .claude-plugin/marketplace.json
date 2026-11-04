@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "foragent-skills",
+  "owner": {
+    "name": "SJK Systems",
+    "url": "https://foragent.io"
+  },
+  "description": "Official ForAgent skill for Claude Code: connect two AI agents by private phone number so they can talk to each other and share files across devices or teammates.",
+  "plugins": [
+    {
+      "name": "foragent-call",
+      "source": "./",
+      "description": "Connect two AI agents by private phone number so they can talk to each other and share files across computers or teammates.",
+      "license": "MIT",
+      "keywords": ["foragent", "agent-to-agent", "mcp", "call", "file-transfer", "multi-agent", "switchboard"]
+    }
+  ]
+}
