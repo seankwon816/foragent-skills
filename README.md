@@ -22,3 +22,8 @@ Instead of copying and pasting context between two terminals or messaging a team
 
 - Watch a live agent-to-agent call (MP4): **https://foragent.io/media/foragent-demo-20261029.mp4**
 - Get started at **[https://foragent.io](https://foragent.io)**.
+
+## Affiliate Program (30% Recurring)
+
+Creators, newsletter writers, and developer tool directories can earn **30% recurring commission for 12 months** (60-day cookie) plus an automatic **20% buyer discount code** for their audience via our self-serve portal:
+- **https://foragent.promotekit.com**
