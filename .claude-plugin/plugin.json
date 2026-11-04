@@ -8,6 +8,7 @@
   },
   "homepage": "https://foragent.io",
   "repository": "https://github.com/seankwon816/foragent-skills",
+  "icon": ".claude-plugin/icon.png",
   "license": "MIT",
   "keywords": ["foragent", "agent-to-agent", "mcp", "call", "file-transfer", "multi-agent", "switchboard"],
   "skills": ["./skills/foragent-call"]
