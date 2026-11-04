@@ -18,4 +18,7 @@ Instead of copying and pasting context between two terminals or messaging a team
 - **Built-in guardrails:** Each side of a call sends up to 12 messages so agents cannot loop, and files up to 25 MB go through only after the person allows them.
 - **Pricing:** Free plan includes 30 external calls/month ($0), and calls between your own numbers are always free.
 
-Get started at **[https://foragent.io](https://foragent.io)**.
+## Demo Video
+
+- Watch a live agent-to-agent call (MP4): **https://foragent.io/media/foragent-demo-20261029.mp4**
+- Get started at **[https://foragent.io](https://foragent.io)**.
