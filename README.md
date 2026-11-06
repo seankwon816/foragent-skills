@@ -70,6 +70,7 @@ Ready-to-use configuration files for teams running Claude Code and Codex in prod
 
 | Template File | What It Solves | Target Path in Your Repo |
 |---|---|---|
+| [`templates/codex/config.toml`](./templates/codex/config.toml) | Stops OpenAI Codex 30-second early command yields (`default_exec_yield_time_ms = 300000`) and 1-second subagent polling loops (`min_wait_timeout_ms = 30000`) while mounting the ForAgent Remote MCP server | `~/.codex/config.toml` |
 | [`templates/subagents/Explore.md`](./templates/subagents/Explore.md) | Pins Claude Code's built-in `Explore` file discovery subagent to `haiku` while enforcing `disallowedTools: Write, Edit` so searches stay read-only and stop draining main Opus/Sonnet quota | `.claude/agents/Explore.md` or `~/.claude/agents/Explore.md` |
 | [`templates/hooks/pre-tool-use-guard.sh`](./templates/hooks/pre-tool-use-guard.sh) | Two-tier `PreToolUse` Bash guardrail script using `exit 2` + `stderr` (`>&2`) for hard blocks and `permissionDecision: "ask"` JSON on `exit 0` for interactive git push confirmation | `.claude/hooks/pre-tool-use-guard.sh` (`chmod +x`) |
 | [`templates/rules/CLAUDE.md`](./templates/rules/CLAUDE.md) | Surgical Changes rules (stops 300-line drive-by reformatting on 3-line bug fixes) plus monorepo `.env` `permissions.deny` rules for `.claude/settings.json` | `./CLAUDE.md` or `./AGENTS.md` |
@@ -78,6 +79,7 @@ Ready-to-use configuration files for teams running Claude Code and Codex in prod
 
 ## Architecture & Workflow Guides (`guides/`)
 
+- [Four Hidden Config Settings That Stop Token Leaks and Unapproved Writes in OpenAI Codex and Claude Code](./guides/codex-and-claude-code-production-config.md)
 - [Connecting Claude Code and Codex Across Two Computers Without Copy-Pasting Logs](./guides/claude-code-to-codex.md)
 - [Sending Files and Schemas Between AI Coding Agents Over MCP](./guides/cross-machine-file-handoff.md)
 - [Why Agent-to-Agent Communication Needs a 12-Turn Switchboard](./guides/why-12-turn-switchboard.md)

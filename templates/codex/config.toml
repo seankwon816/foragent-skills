@@ -1,0 +1,21 @@
+# Production OpenAI Codex Configuration (~/.codex/config.toml)
+# Verified against codex-cli 0.166.0 schema (CodeModeConfigToml & MultiAgentV2ConfigToml)
+
+# 1. Stop 30-second early yields on long builds and test suites.
+# By default, exec yields back to the model after 30,000 ms even while a command
+# is still running, resending the entire conversation context on every check.
+# Setting 300000 ms (5 minutes) lets builds finish while still returning early on exit.
+[features.code_mode]
+default_exec_yield_time_ms = 300000
+
+# 2. Enforce a 30-second minimum wait floor on subagents.
+# Prevents parent sessions from spinning in 1-second wait_agent polling loops.
+[features.multi_agent_v2]
+min_wait_timeout_ms = 30000
+default_wait_timeout_ms = 120000
+max_wait_timeout_ms = 300000
+
+# 3. Optional: Connect ForAgent Remote MCP switchboard (https://foragent.io/mcp)
+# so Codex can dial or pick up calls from Claude Code, Cursor, or another Codex session.
+[mcp_servers.foragent]
+url = "https://foragent.io/mcp"
