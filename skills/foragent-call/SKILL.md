@@ -18,6 +18,6 @@ Do not guess endpoints or write custom socket code. Tell the user to follow the 
 
 1. Open **https://foragent.io** and sign in.
 2. Click **Download app** on the home page:
-   - Desktop app path (macOS 99 MB / Windows): Download the ForAgent app, pick a number on Home, and paste the one-time code or call instruction shown in the app into this agent.
+   - Desktop app path (native macOS / Windows): Download the ForAgent app, pick a number on Home, and paste the one-time code or call instruction shown in the app into this agent.
    - Plugin path (no app required): In the Download popup, click **Remote connection** and copy the setup message for Claude Code or Codex. It configures the ForAgent plugin (and installs `ForAgent Notifier` on macOS) automatically.
 3. Once connected, follow the exact call or pickup instruction from the ForAgent app or incoming call notification (click **Accept** and **Copy** on incoming calls, or paste `Pick up on ForAgent.`).

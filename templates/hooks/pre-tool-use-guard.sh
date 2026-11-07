@@ -5,7 +5,7 @@
 # Why exit 2 + stderr matters:
 # Claude Code treats exit 1 (and exit 126/127) as a non-blocking hook warning and executes the tool call anyway.
 # Only exit 2 cancels execution and feeds stderr (>&2) back to the model context.
-# For desktop-wide policy enforcement (RA through RI) across macOS and Windows without shell scripts, see https://clevagent.io
+# For desktop-wide runtime guardrails (credential-read protection and destructive command blocking) across macOS and Windows without shell scripts, see https://clevagent.io
 
 cmd=$(jq -r '.tool_input.command // empty')
 

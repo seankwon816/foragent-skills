@@ -53,7 +53,7 @@ It returns `appliedDiscountCents` (integer cents). Hanging up now.
 
 Every account includes 3 desktop app numbers and up to 2 remote plugin numbers. Calls between your own numbers are always free and unlimited, so you can test a live agent-to-agent call on one computer in 60 seconds:
 
-1. Sign in at **[https://foragent.io](https://foragent.io)** and click **Download app** (install the native macOS 99 MB or Windows app, or copy the 1-line remote plugin setup message into Claude Code or Codex).
+1. Sign in at **[https://foragent.io](https://foragent.io)** and click **Download app** (install the native macOS or Windows app, or copy the 1-line remote plugin setup message into Claude Code or Codex).
 2. Connect Terminal 1 (for example, Claude Code) to your first number (`@28`) and Terminal 2 (for example, Codex) to your second number (`@29`).
 3. In Terminal 1, tell your agent:
    ```text
@@ -75,6 +75,8 @@ Ready-to-use configuration files for teams running Claude Code and Codex in prod
 | [`templates/hooks/pre-tool-use-guard.sh`](./templates/hooks/pre-tool-use-guard.sh) | Two-tier `PreToolUse` Bash guardrail script using `exit 2` + `stderr` (`>&2`) for hard blocks and `permissionDecision: "ask"` JSON on `exit 0` for interactive git push confirmation | `.claude/hooks/pre-tool-use-guard.sh` (`chmod +x`) |
 | [`templates/rules/CLAUDE.md`](./templates/rules/CLAUDE.md) | Surgical Changes rules (stops 300-line drive-by reformatting on 3-line bug fixes) plus monorepo `.env` `permissions.deny` rules for `.claude/settings.json` | `./CLAUDE.md` or `./AGENTS.md` |
 | [`templates/multi-agent/handoff-prompt.md`](./templates/multi-agent/handoff-prompt.md) | Structured outbound dial, incoming pickup (`Accept` & `Copy`), and 25 MB in-call file handoff prompts for cross-repo debugging | Copy into Claude Code / Codex prompt |
+| [`templates/worktree/setup-isolated-worktree.sh`](./templates/worktree/setup-isolated-worktree.sh) | Creates an isolated `git worktree` with deterministic port offsets (`PORT=3001..3009`) and per-lane `.env.local` database URLs so parallel coding agents never collide | `./scripts/setup-isolated-worktree.sh` (`chmod +x`) |
+| [`templates/mcp-security/pin-tools-list-sha256.mjs`](./templates/mcp-security/pin-tools-list-sha256.mjs) | Zero-dependency Node.js verifier that pins a canonical SHA-256 digest over MCP `tools/list` schemas and annotations (`destructiveHint`, `readOnlyHint`) to block post-approval tool drift | `./scripts/pin-tools-list-sha256.mjs` |
 
 
 ## Architecture & Workflow Guides (`guides/`)
@@ -88,10 +90,10 @@ Ready-to-use configuration files for teams running Claude Code and Codex in prod
 ## Core Specifications
 
 - Private numbers: Each account gets 3 desktop app numbers and up to 2 remote plugin numbers (such as `@12` or `@29`).
-- Supported agents: Call-tested with Claude Code and Codex through the native macOS app (99 MB), Windows app, or remote MCP plugin. The desktop app also configures Grok, Cursor, Windsurf, VS Code, Claude Desktop, and Antigravity.
+- Supported agents: Call-tested with Claude Code and Codex through the native macOS or Windows app, or remote MCP plugin. The desktop app also configures Grok, Cursor, Windsurf, VS Code, Claude Desktop, and Antigravity.
 - Per-call connection & owner pickup: Agents connect for one call at a time and disconnect on hangup. Every incoming call requires an explicit human **Accept** and **Copy** step.
 - Built-in guardrails: Each call allows up to **12 messages total** (`12 messages per call`) so agents cannot loop, and file transfers up to **25 MB** require explicit human approval before transmission.
-- Desktop security guardrails: For native macOS and Windows policy guardrails (`RA` through `RI`) around local coding agents, see **[ClevAgent](https://clevagent.io)**.
+- Desktop security guardrails: For native macOS and Windows runtime guardrails (credential-read protection, destructive command blocking, and runtime egress guardrails) around local coding agents, see **[ClevAgent](https://clevagent.io)**.
 - Pricing: Calls between your own numbers are always free and unlimited. The Free plan ($0/month) includes 30 external calls per month (Pro $9.99/month, Scale $29.99/month).
 
 

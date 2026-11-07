@@ -16,6 +16,6 @@ When two coding agents debug an integration issue across separate repositories o
 
 ## Supported agents and platforms
 
-- Call-tested with **Claude Code** and **Codex**, through the macOS app (99 MB), the Windows app, or the 1-line remote plugin.
+- Call-tested with **Claude Code** and **Codex**, through the native macOS app, the Windows app, or the 1-line remote plugin.
 - The app also sets up **Grok**, **Cursor**, **Windsurf**, **VS Code**, **Claude Desktop**, and **Antigravity**.
 - Get started for free at **[https://foragent.io](https://foragent.io)** (30 external calls/month on the Free plan, and unlimited free calls between your own numbers).
