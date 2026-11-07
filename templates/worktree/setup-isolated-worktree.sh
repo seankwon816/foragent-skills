@@ -4,35 +4,55 @@
 #
 # Usage:
 #   chmod +x scripts/setup-isolated-worktree.sh
-#   ./scripts/setup-isolated-worktree.sh <lane-index-1-to-9> <branch-name>
+#   ./scripts/setup-isolated-worktree.sh <lane-index-1-to-9|auto> <branch-name>
 #
 # Example:
-#   ./scripts/setup-isolated-worktree.sh 1 feat/checkout-discounts
+#   ./scripts/setup-isolated-worktree.sh auto feat/checkout-discounts
 #   ./scripts/setup-isolated-worktree.sh 2 fix/webhook-idempotency
 #
 # What this solves:
 # Spawning two coding agents in git worktrees still breaks integration tests if both worktrees
-# bind to localhost:3000 or run migrations against the same local database. This script creates
-# the worktree, assigns deterministic port offsets (3001, 5433, 6380...), and writes a scoped
-# .env.local so parallel sessions never collide.
+# bind to localhost:3000 or run migrations against the same local database. This script acquires
+# an atomic per-lane lock directory (when 'auto' is passed), creates the worktree, assigns
+# deterministic port offsets (3001, 5433, 6380...), and writes a scoped .env.local so parallel
+# sessions never collide.
 
 set -euo pipefail
 
 if [[ $# -lt 2 ]]; then
-  echo "Usage: $0 <lane-index-1-to-9> <branch-name>" >&2
+  echo "Usage: $0 <lane-index-1-to-9|auto> <branch-name>" >&2
   exit 1
 fi
 
-LANE="$1"
+LANE_ARG="$1"
 BRANCH="$2"
-
-if ! [[ "$LANE" =~ ^[1-9]$ ]]; then
-  echo "Error: lane-index must be an integer between 1 and 9 (got: $LANE)." >&2
-  exit 1
-fi
 
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 REPO_NAME="$(basename "$REPO_ROOT")"
+LOCK_ROOT="${REPO_ROOT}/.git/worktree-lanes"
+mkdir -p "$LOCK_ROOT"
+
+if [[ "$LANE_ARG" == "auto" ]]; then
+  LANE=""
+  for candidate in {1..9}; do
+    if mkdir "${LOCK_ROOT}/lane-${candidate}" 2>/dev/null; then
+      LANE="$candidate"
+      break
+    fi
+  done
+  if [[ -z "$LANE" ]]; then
+    echo "Error: all 9 worktree lanes are currently locked in ${LOCK_ROOT}." >&2
+    exit 1
+  fi
+else
+  if ! [[ "$LANE_ARG" =~ ^[1-9]$ ]]; then
+    echo "Error: lane-index must be 1..9 or 'auto' (got: $LANE_ARG)." >&2
+    exit 1
+  fi
+  LANE="$LANE_ARG"
+  mkdir -p "${LOCK_ROOT}/lane-${LANE}"
+fi
+
 SLUG="$(echo "$BRANCH" | tr '/:' '--')"
 WORKTREE_DIR="$(dirname "$REPO_ROOT")/${REPO_NAME}-lane-${LANE}-${SLUG}"
 
