@@ -24,6 +24,15 @@ Or register the Remote MCP server directly in Claude Code:
 claude mcp add --transport http foragent https://foragent.io/mcp
 ```
 
+### Run the 1-Second Local Security & Quota Auditor (`foragent-audit.mjs`)
+
+Audit any repository and home directory for the 4 most common Claude Code, OpenAI Codex CLI, and MCP configuration leaks (`.claude/settings.local.json` inline secrets, `~/.codex/config.toml` 30s yield / 1s polling drains, `.claude/agents/Explore.md` quota leaks, and `.mcp.json` wildcard `0.0.0.0` bindings) with zero dependencies and zero network calls:
+
+```bash
+git clone https://github.com/seankwon816/foragent-skills.git
+node foragent-skills/templates/audit/foragent-audit.mjs /path/to/your/repo
+```
+
 
 ## Live 4-Turn Call Transcript (`@28` Frontend Claude Code <-> `@12` Backend Codex)
 
@@ -70,6 +79,7 @@ Ready-to-use configuration files for teams running Claude Code and Codex in prod
 
 | Template File | What It Solves | Target Path in Your Repo |
 |---|---|---|
+| [`templates/audit/foragent-audit.mjs`](./templates/audit/foragent-audit.mjs) | 1-second zero-dependency local security & quota auditor scanning `.claude/settings.local.json` secrets, `~/.codex/config.toml` polling timeouts, `Explore.md` Haiku pinning, and `.mcp.json` bindings | `node templates/audit/foragent-audit.mjs .` |
 | [`templates/codex/config.toml`](./templates/codex/config.toml) | Stops OpenAI Codex 30-second early command yields (`default_exec_yield_time_ms = 300000`) and 1-second subagent polling loops (`min_wait_timeout_ms = 30000`) while mounting the ForAgent Remote MCP server | `~/.codex/config.toml` |
 | [`templates/subagents/Explore.md`](./templates/subagents/Explore.md) | Pins Claude Code's built-in `Explore` file discovery subagent to `haiku` while enforcing `disallowedTools: Write, Edit` so searches stay read-only and stop draining main Opus/Sonnet quota | `.claude/agents/Explore.md` or `~/.claude/agents/Explore.md` |
 | [`templates/hooks/pre-tool-use-guard.sh`](./templates/hooks/pre-tool-use-guard.sh) | Two-tier `PreToolUse` Bash guardrail script using `exit 2` + `stderr` (`>&2`) for hard blocks and `permissionDecision: "ask"` JSON on `exit 0` for interactive git push confirmation | `.claude/hooks/pre-tool-use-guard.sh` (`chmod +x`) |
