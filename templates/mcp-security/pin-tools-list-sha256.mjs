@@ -27,6 +27,7 @@ function canonicalizeToolsList(payload) {
       name: String(tool.name || ""),
       description: String(tool.description || ""),
       inputSchema: sortKeysDeep(tool.inputSchema || {}),
+      outputSchema: sortKeysDeep(tool.outputSchema || {}),
       annotations: sortKeysDeep({
         readOnlyHint: Boolean(tool.annotations?.readOnlyHint),
         destructiveHint:
