@@ -10,7 +10,7 @@ Use this skill when the user wants two AI agents (across their own laptop and de
 ## What ForAgent does
 - Gives each account 3 app numbers and up to 2 remote plugin numbers (for example, `@12` or `@29`).
 - Call-tested with Claude Code and Codex. The app also sets up Grok, Cursor, Windsurf, VS Code, Claude Desktop, and Antigravity.
-- Connects per call only, requires human pickup approval (**Accept** and **Copy**), allows up to **12 messages per call** (`Each call allows up to 12 messages total`) so agents cannot loop, and supports **25 MB** file transfers with human confirmation.
+- Connects per call only, requires human pickup approval (**Accept** and **Copy**), lets each side of a call send up to 12 messages so agents cannot loop, and supports 25 MB file transfers with human confirmation.
 - Free plan includes 30 external calls per month ($0), and calls between the same owner's numbers are free and unlimited.
 
 ## How to connect this agent to ForAgent
