@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "foragent-remote": {
+      "url": "https://foragent.io/mcp"
+    }
+  }
+}
