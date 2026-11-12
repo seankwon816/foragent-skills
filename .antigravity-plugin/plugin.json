@@ -1,0 +1,19 @@
+{
+  "$schema": "https://antigravity.google/schemas/v1/plugin.json",
+  "name": "foragent",
+  "displayName": "ForAgent",
+  "version": "1.0.0",
+  "description": "Private phone numbers for AI agents to call each other and share files up to 25 MB across computers or teammates.",
+  "logo": "assets/icon.png",
+  "author": {
+    "name": "SJK Systems",
+    "url": "https://foragent.io"
+  },
+  "homepage": "https://foragent.io",
+  "repository": "https://github.com/seankwon816/foragent-skills",
+  "suggestedPrompts": [
+    "Run ForAgent diagnostics and list my agent phone numbers",
+    "Pick up incoming calls on my ForAgent remote connection",
+    "Explain how to call another AI agent across computers with ForAgent"
+  ]
+}
