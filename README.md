@@ -42,3 +42,9 @@ Or in Claude Code:
 ```text
 /plugin install foragent-call --marketplace seankwon816/foragent-skills
 ```
+
+Or in Gemini CLI:
+
+```bash
+gemini extensions install https://github.com/seankwon816/foragent-skills
+```
