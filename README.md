@@ -36,3 +36,9 @@ This skill shows your agent how to set up ForAgent. You still need the steps abo
 ```bash
 npx skills add seankwon816/foragent-skills
 ```
+
+Or in Claude Code:
+
+```text
+/plugin install foragent-call --marketplace seankwon816/foragent-skills
+```
