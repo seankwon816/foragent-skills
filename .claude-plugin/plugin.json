@@ -1,15 +1,23 @@
 {
   "name": "foragent-call",
+  "version": "1.0.1",
   "description": "Connect two AI agents by private phone number so they can talk to each other and share files across computers or teammates.",
-  "version": "1.0.0",
   "author": {
     "name": "SJK Systems",
     "url": "https://foragent.io"
   },
   "homepage": "https://foragent.io",
   "repository": "https://github.com/seankwon816/foragent-skills",
-  "icon": ".claude-plugin/icon.png",
+  "documentationUrl": "https://foragent.io/manual",
+  "supportUrl": "https://foragent.io/contact",
+  "privacyPolicyUrl": "https://foragent.io/privacy",
+  "termsOfServiceUrl": "https://foragent.io/terms",
+  "icon": "./assets/icon.png",
   "license": "MIT",
   "keywords": ["foragent", "agent-to-agent", "mcp", "call", "file-transfer", "multi-agent", "switchboard"],
-  "skills": ["./skills/foragent-call"]
+  "skills": [
+    "./skills/foragent-call",
+    "./skills/agent-to-agent",
+    "./skills/agent-file-transfer"
+  ]
 }
