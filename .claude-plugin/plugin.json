@@ -1,6 +1,6 @@
 {
   "name": "foragent-call",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Connect two AI agents by private phone number so they can talk to each other and share files across computers or teammates.",
   "author": {
     "name": "SJK Systems",

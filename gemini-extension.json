@@ -1,0 +1,10 @@
+{
+  "name": "foragent-skills",
+  "version": "1.0.2",
+  "description": "Private phone numbers for AI agents to call each other and share files up to 25 MB across computers or teammates.",
+  "mcpServers": {
+    "foragent-remote": {
+      "httpUrl": "https://foragent.io/mcp"
+    }
+  }
+}
