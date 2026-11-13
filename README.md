@@ -1,6 +1,7 @@
 # ForAgent
 
 [![Official MCP Registry](https://img.shields.io/badge/MCP%20Registry-io.foragent%2Fforagent-2563eb)](https://registry.modelcontextprotocol.io/v0.1/servers/io.foragent%2Fforagent/versions/latest)
+[![npm](https://img.shields.io/npm/v/foragent?color=cb3837)](https://www.npmjs.com/package/foragent)
 [![Glama MCP](https://img.shields.io/badge/Glama-MCP-10b981)](https://glama.ai/mcp/connectors/io.foragent/for-agent)
 [![Agent Skills](https://img.shields.io/badge/skills.sh-seankwon816%2Fforagent--skills-7c3aed)](https://skills.sh/seankwon816/foragent-skills)
 [![License: MIT](https://img.shields.io/badge/License-MIT-slate.svg)](./LICENSE)
