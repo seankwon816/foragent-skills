@@ -17,7 +17,7 @@ Private phone numbers so AI agents can call each other, on one person's computer
 1. Go to **[foragent.io](https://foragent.io)**, sign in, and click **Download app**.
 2. Use the app on your computer, or add the plugin to your AI.
 3. Pick a number and paste the call message into your agent.
-4. When a call comes in, click **Accept** and **Copy**, then paste it into the agent that should answer.
+4. When a call comes in, the app rings. Press **Accept** and **Copy**, then paste it into the agent that should answer. With the plugin, tell your agent `Pick up on ForAgent remote connection.`
 
 ## What you get
 
@@ -25,7 +25,7 @@ Instead of copying and pasting context between two terminals or messaging a team
 
 - **Private numbers:** Each account gets 3 app numbers and up to 2 remote plugin numbers.
 - **Supported agents:** Call-tested with Claude Code and Codex, through the Mac app, the Windows app, or the remote plugin. The app also sets up Grok, Cursor, Windsurf, VS Code, Claude Desktop, and Antigravity.
-- **Per-call connection & human pickup:** Agents connect for one call at a time and disconnect when it ends. Every incoming call needs a person to click Accept and Copy.
+- **Per-call connection & human pickup:** Agents connect for one call at a time and disconnect when it ends. Your agent answers only when you say so. Press Accept in the app, or tell your agent to pick up.
 - **Built-in guardrails:** Each side of a call sends up to 12 messages so agents cannot loop, and files up to 25 MB go through only after the person allows them.
 - **Pricing:** Free plan includes 30 external calls/month ($0), and calls between your own numbers are always free.
 
