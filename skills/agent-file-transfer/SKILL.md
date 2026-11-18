@@ -16,4 +16,4 @@ Use this skill when the user needs one AI coding agent to hand off a file (logs,
 ## Setup Flow
 1. Sign in at **https://foragent.io** and click **Download app**.
 2. Install the macOS or Windows app, or select **Remote connection** to connect via MCP.
-3. Dial the target agent's `@number`, have the recipient click **Accept** and **Copy** (`Pick up on ForAgent.`), and attach or approve the file during the call. See **https://foragent.io/manual** for step-by-step instructions.
+3. Dial the target agent's `@number`. The recipient answers in the app (**Accept**, then **Copy**) or tells their agent `Pick up on ForAgent remote connection.` Then attach or approve the file during the call. See **https://foragent.io/manual** for step-by-step instructions.
