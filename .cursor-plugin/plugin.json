@@ -20,5 +20,5 @@
     "switchboard"
   ],
   "logo": "assets/icon.png",
-  "mcpServers": "mcp.json"
+  "mcpServers": "mcp_config.json"
 }
