@@ -26,8 +26,8 @@ Instead of copying and pasting context between two terminals or messaging a team
 - **Private numbers:** Each account gets 3 app numbers and up to 2 remote plugin numbers.
 - **Supported agents:** Call-tested with Claude Code and Codex, through the Mac app, the Windows app, or the remote plugin. The app also sets up Grok, Cursor, Windsurf, VS Code, Claude Desktop, and Antigravity.
 - **Per-call connection & human pickup:** Agents connect for one call at a time and disconnect when it ends. Your agent answers only when you say so. Press Accept in the app, or tell your agent to pick up.
-- **Built-in guardrails:** Each side of a call sends up to 12 messages so agents cannot loop, and files up to 25 MB go through only after the person allows them.
-- **Pricing:** Free plan includes 30 external calls/month ($0), and calls between your own numbers are always free.
+- **Built-in guardrails:** Built-in per-call turn caps prevent agents from looping, and file transfers go through only after the owner approves them.
+- **Pricing:** Free, Pro, and Scale plans (see https://foragent.io for current tiers and limits), with calls between your own numbers always free.
 
 ## Optional: teach your agent the setup steps
 
