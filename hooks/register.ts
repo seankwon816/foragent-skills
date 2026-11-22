@@ -6,7 +6,6 @@ import type { EngineInterface, McpToolResult, Register } from 'claude-code';
 import {
   FORAGENT_REMOTE_SERVER,
   formatWakePrompt,
-  INITIAL_RETRY_MS,
   isRetryableDrop,
   isTerminalDrop,
   isWakeExpired,
@@ -23,6 +22,7 @@ type ClockTimer = ReturnType<EngineInterface['clock']['after']>;
 interface WakeLoopState {
   alive: boolean;
   inFlight: boolean;
+  generation: number;
   failures: number;
   timer: ClockTimer | null;
   pendingWake: ParsedWake | null;
@@ -35,6 +35,7 @@ function textOf(result: McpToolResult): string {
 
 function stopLoop(state: WakeLoopState): void {
   state.alive = false;
+  state.generation += 1;
   state.pendingWake = null;
   state.timer?.cancel();
   state.timer = null;
@@ -42,17 +43,19 @@ function stopLoop(state: WakeLoopState): void {
 
 function scheduleNext($: EngineInterface, state: WakeLoopState, delayMs: number): void {
   if (!state.alive || state.inFlight) return;
+  const gen = state.generation;
   state.timer?.cancel();
   state.timer = $.clock.after(delayMs, () => {
     state.timer = null;
+    if (state.generation !== gen) return;
     void waitOnce($, state);
   });
 }
 
-async function submitWake($: EngineInterface, state: WakeLoopState, wake: ParsedWake): Promise<void> {
-  if (!state.alive) return;
+async function submitWake($: EngineInterface, state: WakeLoopState, wake: ParsedWake, gen: number): Promise<void> {
+  if (!state.alive || state.generation !== gen) return;
   const now = await $.clock.now();
-  if (isWakeExpired(wake, now)) return;
+  if (!state.alive || state.generation !== gen || isWakeExpired(wake, now)) return;
   let dropReason = '';
   try {
     const result = await $.prompt.submit({ text: formatWakePrompt(wake.number) });
@@ -60,43 +63,50 @@ async function submitWake($: EngineInterface, state: WakeLoopState, wake: Parsed
   } catch (error) {
     dropReason = error instanceof Error ? error.message : String(error);
   }
-  if (!dropReason) return;
+  if (!state.alive || state.generation !== gen || !dropReason) return;
   if (isTerminalDrop(dropReason)) {
     stopLoop(state);
     return;
   }
-  if (state.alive && isRetryableDrop(dropReason)) {
+  if (isRetryableDrop(dropReason)) {
     state.pendingWake = wake;
   }
 }
 
 async function waitOnce($: EngineInterface, state: WakeLoopState): Promise<void> {
   if (!state.alive || state.inFlight) return;
+  const gen = state.generation;
   state.inFlight = true;
   let nextDelayMs = 0;
   try {
     const result = await $.mcp.call(FORAGENT_REMOTE_SERVER, WAIT_FOR_WAKE_TOOL, { timeoutSec: WAIT_TIMEOUT_SEC });
-    if (!state.alive) return;
+    if (!state.alive || state.generation !== gen) return;
     if (result.isError) {
       state.failures += 1;
       nextDelayMs = retryDelayMs(state.failures);
       return;
     }
-    state.failures = 0;
     const now = await $.clock.now();
+    if (!state.alive || state.generation !== gen) return;
     const parsed = parseWakePayload(textOf(result), now);
+    if (parsed.kind === 'invalid' || parsed.kind === 'cancelled') {
+      state.failures += 1;
+      nextDelayMs = retryDelayMs(state.failures);
+      return;
+    }
+    state.failures = 0;
     if (parsed.kind === 'accepted' && state.dedupe.claim(parsed.wake)) {
-      void submitWake($, state, parsed.wake);
-    } else if (parsed.kind === 'cancelled') {
-      nextDelayMs = INITIAL_RETRY_MS;
+      void submitWake($, state, parsed.wake, gen);
     }
   } catch {
-    if (!state.alive) return;
+    if (!state.alive || state.generation !== gen) return;
     state.failures += 1;
     nextDelayMs = retryDelayMs(state.failures);
   } finally {
-    state.inFlight = false;
-    if (state.alive) scheduleNext($, state, nextDelayMs);
+    if (state.generation === gen) {
+      state.inFlight = false;
+      if (state.alive) scheduleNext($, state, nextDelayMs);
+    }
   }
 }
 
@@ -104,6 +114,7 @@ export const register: Register = (on) => {
   const state: WakeLoopState = {
     alive: false,
     inFlight: false,
+    generation: 0,
     failures: 0,
     timer: null,
     pendingWake: null,
@@ -113,7 +124,9 @@ export const register: Register = (on) => {
   on('session.start', async ($, e, next) => {
     const started = await next(e);
     if (!e.isInteractive) return started;
+    state.generation += 1;
     state.alive = true;
+    state.inFlight = false;
     state.failures = 0;
     state.pendingWake = null;
     scheduleNext($, state, 0);
@@ -134,7 +147,7 @@ export const register: Register = (on) => {
     if (e.agentId === undefined && !e.isAborted && state.alive && state.pendingWake !== null) {
       const wake = state.pendingWake;
       state.pendingWake = null;
-      void submitWake($, state, wake);
+      void submitWake($, state, wake, state.generation);
     }
     return completed;
   });

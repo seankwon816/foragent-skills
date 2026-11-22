@@ -319,3 +319,129 @@ test('(4) idle waiting across multiple 50s waits without a call produces zero pr
 
   await $.session.end({ reason: 'prompt_input_exit', sessionId: 's-6', resume: {} as never });
 });
+
+test('(5) malformed and repeated cancelled payloads back off instead of tight-looping, and dedupe by callPublicId across eventIds', async ($, on) => {
+  const clock = mock.clock(on, { now: 7_000_000 });
+  const prompts: string[] = [];
+  let calls = 0;
+
+  on('session.start', () => ({ cwd: '/work' }));
+  on('session.end', ($, e) => ({ sessionId: e.sessionId }));
+  on('prompt.submit', ($, e) => {
+    prompts.push(e.text);
+    return { text: e.text };
+  });
+
+  on('mcp.call', async () => {
+    calls += 1;
+    if (calls === 1) return { value: { content: [{ type: 'text' as const, text: 'not-json' }], isError: false } };
+    if (calls === 2) return jsonResult({ ok: true, status: 'cancelled' });
+    if (calls === 3) {
+      return jsonResult({
+        ok: true,
+        status: 'accepted',
+        eventId: 'evt-a',
+        callPublicId: 'call-same',
+        number: '42',
+        expiresAt: new Date(clock.now() + 30_000).toISOString(),
+      });
+    }
+    if (calls === 4) {
+      // Different eventId for the same callPublicId must still wake only once.
+      return jsonResult({
+        ok: true,
+        status: 'accepted',
+        eventId: 'evt-b',
+        callPublicId: 'call-same',
+        number: '42',
+        expiresAt: new Date(clock.now() + 30_000).toISOString(),
+      });
+    }
+    await clock.sleep(50_000);
+    return jsonResult({ ok: true, status: 'none' });
+  });
+
+  await $.session.start({ surface: 'terminal', isInteractive: true, cwd: '/work' });
+  await clock.settle();
+  expect(calls).toBe(1);
+
+  // Invalid payload backs off 1s (no 0ms tight loop).
+  await clock.advance(999);
+  expect(calls).toBe(1);
+  await clock.advance(1);
+  expect(calls).toBe(2);
+
+  // Subsequent cancelled payload backs off 2s.
+  await clock.advance(1_999);
+  expect(calls).toBe(2);
+  await clock.advance(1);
+  expect(calls).toBe(5);
+  expect(prompts).toEqual(['You have a ForAgent call on @42. Pick up now.']);
+
+  await $.session.end({ reason: 'prompt_input_exit', sessionId: 's-7', resume: {} as never });
+});
+
+test('(6) terminal prompt drop stops the wake loop, while session clear drops pending retries without stopping waits', async ($, on) => {
+  const clock = mock.clock(on, { now: 8_000_000 });
+  const prompts: string[] = [];
+  let dropMode: 'retryable' | 'terminal' | 'none' = 'retryable';
+  let calls = 0;
+
+  on('session.start', () => ({ cwd: '/work' }));
+  on('session.end', ($, e) => ({ sessionId: e.sessionId }));
+  on('turn.complete', () => ({ text: '' }));
+  on('prompt.submit', ($, e) => {
+    prompts.push(e.text);
+    if (dropMode === 'retryable') return { drop: 'the session was stopped and nobody has sent input since' };
+    if (dropMode === 'terminal') return { drop: 'the host has ended its input' };
+    return { text: e.text };
+  });
+
+  on('mcp.call', async () => {
+    calls += 1;
+    if (calls === 1) {
+      return jsonResult({
+        ok: true,
+        status: 'accepted',
+        eventId: 'evt-clear-1',
+        callPublicId: 'call-clear-1',
+        number: '11',
+        expiresAt: new Date(clock.now() + 20_000).toISOString(),
+      });
+    }
+    if (calls === 2) {
+      await clock.sleep(5_000);
+      return jsonResult({
+        ok: true,
+        status: 'accepted',
+        eventId: 'evt-term-2',
+        callPublicId: 'call-term-2',
+        number: '12',
+        expiresAt: new Date(clock.now() + 20_000).toISOString(),
+      });
+    }
+    await clock.sleep(50_000);
+    return jsonResult({ ok: true, status: 'none' });
+  });
+
+  await $.session.start({ surface: 'terminal', isInteractive: true, cwd: '/work' });
+  await clock.settle();
+  expect(prompts).toEqual(['You have a ForAgent call on @11. Pick up now.']);
+
+  // /clear drops pending retry for call-clear-1, so next clean turn does not resubmit it, but wait loop stays alive.
+  await $.session.end({ reason: 'clear', sessionId: 's-8', resume: {} as never });
+  dropMode = 'terminal';
+  await $.turn.complete({ turnId: 't-after-clear', answer: 'ok', durationMs: 50, isAborted: false, reason: 'answer' });
+  await clock.settle();
+  expect(prompts).toHaveLength(1);
+
+  // Second accepted call arrives while wait loop is still alive, hits terminal drop -> stops loop permanently.
+  await clock.advance(5_000);
+  expect(prompts).toEqual([
+    'You have a ForAgent call on @11. Pick up now.',
+    'You have a ForAgent call on @12. Pick up now.',
+  ]);
+  const callsAfterTerminal = calls;
+  await clock.advance(120_000);
+  expect(calls).toBe(callsAfterTerminal);
+});
