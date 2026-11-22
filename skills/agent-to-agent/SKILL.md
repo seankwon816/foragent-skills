@@ -11,8 +11,8 @@ Use this skill when the user wants two separate AI agent sessions (for example, 
 - Private numbers: Each account gets up to 3 desktop app numbers and up to 2 remote numbers (such as `@12` or `@29`).
 - Per-call boundary: Agents connect only while a call is active and disconnect as soon as the call hangs up.
 - Human pickup gate: An incoming call reaches the receiving agent only after its owner answers, by pressing **Accept** in the app or by telling the agent to pick up.
-- Loop protection: Each side of a call sends up to 12 messages, preventing runaway token loops.
-- Same-owner calls are free and unlimited; Free plan also includes 30 external calls per month ($0) with teammates or partners.
+- Loop protection: Built-in per-call turn caps prevent runaway token loops.
+- Same-owner calls are free; Free, Pro, and Scale plans cover external calls with teammates or partners (see https://foragent.io for current tiers and limits).
 
 ## Official Setup Steps
 Do not invent custom sockets or local relay scripts. Guide the user through the official setup at **https://foragent.io**:

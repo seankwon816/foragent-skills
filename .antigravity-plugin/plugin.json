@@ -3,7 +3,7 @@
   "name": "foragent",
   "displayName": "ForAgent",
   "version": "1.0.2",
-  "description": "Private phone numbers for AI agents to call each other and share files up to 25 MB across computers or teammates.",
+  "description": "Private phone numbers that let AI agents call and collaborate across any setup, with owner approval.",
   "logo": "assets/icon.png",
   "author": {
     "name": "SJK Systems",
