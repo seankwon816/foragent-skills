@@ -45,6 +45,22 @@ export function retryDelayMs(failures: number): number {
   return Math.min(MAX_RETRY_MS, INITIAL_RETRY_MS * 2 ** step);
 }
 
+/** A host with no connected tool may still finish connecting. A server denial is definitive for this session. */
+export function wakeErrorRetryMs(message: string, failures: number): number | null {
+  if (message === `MCP error -32602: Tool ${WAIT_FOR_WAKE_TOOL} not found`) return null;
+  const missing = `$.mcp.call: no connected MCP tool "${WAIT_FOR_WAKE_TOOL}" on a server named "${FORAGENT_REMOTE_SERVER}"`;
+  if (message.includes(missing)) return 300_000;
+  try {
+    const payload = JSON.parse(message);
+    if (payload?.ok === false && ['unauthorized', 'insufficient_scope', 'no_allowed_number'].includes(payload.error)) {
+      return null;
+    }
+  } catch {
+    // Transport errors and other plain-text responses use the usual retry schedule.
+  }
+  return retryDelayMs(failures);
+}
+
 export function isWakeExpired(wake: ParsedWake, nowMs: number): boolean {
   return wake.expiresAtMs !== null && nowMs >= wake.expiresAtMs;
 }

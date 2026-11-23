@@ -15,6 +15,7 @@ import {
   WAIT_FOR_WAKE_TOOL,
   WAIT_TIMEOUT_SEC,
   WakeDedupe,
+  wakeErrorRetryMs,
 } from './wake-logic';
 
 type ClockTimer = ReturnType<EngineInterface['clock']['after']>;
@@ -77,13 +78,12 @@ async function waitOnce($: EngineInterface, state: WakeLoopState): Promise<void>
   if (!state.alive || state.inFlight) return;
   const gen = state.generation;
   state.inFlight = true;
-  let nextDelayMs = 0;
+  let nextDelayMs: number | null = 0;
   try {
     const result = await $.mcp.call(FORAGENT_REMOTE_SERVER, WAIT_FOR_WAKE_TOOL, { timeoutSec: WAIT_TIMEOUT_SEC });
     if (!state.alive || state.generation !== gen) return;
     if (result.isError) {
-      state.failures += 1;
-      nextDelayMs = retryDelayMs(state.failures);
+      nextDelayMs = wakeErrorRetryMs(textOf(result), ++state.failures);
       return;
     }
     const now = await $.clock.now();
@@ -98,14 +98,14 @@ async function waitOnce($: EngineInterface, state: WakeLoopState): Promise<void>
     if (parsed.kind === 'accepted' && state.dedupe.claim(parsed.wake)) {
       void submitWake($, state, parsed.wake, gen);
     }
-  } catch {
+  } catch (error) {
     if (!state.alive || state.generation !== gen) return;
-    state.failures += 1;
-    nextDelayMs = retryDelayMs(state.failures);
+    nextDelayMs = wakeErrorRetryMs(error instanceof Error ? error.message : String(error), ++state.failures);
   } finally {
     if (state.generation === gen) {
       state.inFlight = false;
-      if (state.alive) scheduleNext($, state, nextDelayMs);
+      if (nextDelayMs === null) stopLoop(state);
+      else scheduleNext($, state, nextDelayMs);
     }
   }
 }

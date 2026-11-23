@@ -445,3 +445,46 @@ test('(6) terminal prompt drop stops the wake loop, while session clear drops pe
   await clock.advance(120_000);
   expect(calls).toBe(callsAfterTerminal);
 });
+
+test('confirmed access and tool errors stop polling until a new interactive session', async ($, on) => {
+  const clock = mock.clock(on, { now: 9_000_000 });
+  const missingTool = 'MCP error -32602: Tool foragent_wait_for_wake not found';
+  const replies = [
+    jsonResult({ ok: false, error: 'unauthorized' }, true),
+    jsonResult({ ok: false, error: 'no_allowed_number' }, true),
+    jsonResult({ ok: false, error: 'insufficient_scope' }, true),
+    { value: { content: [{ type: 'text' as const, text: missingTool }], isError: true } },
+  ];
+  let calls = 0;
+  on('session.start', () => ({ cwd: '/work' }));
+  on('session.end', ($, e) => ({ sessionId: e.sessionId }));
+  let current = jsonResult({ ok: false, error: 'unauthorized' }, true);
+  on('mcp.call', () => { calls++; return current; });
+  for (const [i, reply] of replies.entries()) {
+    current = reply;
+    await $.session.start({ surface: 'terminal', isInteractive: true, cwd: '/work' });
+    await clock.settle();
+    await clock.advance(600_000);
+    expect(calls).toBe(i + 1);
+    await $.session.end({ reason: 'prompt_input_exit', sessionId: 's-terminal', resume: {} as never });
+  }
+});
+
+test('a missing host tool waits five minutes and then recovers in the same session', async ($, on) => {
+  const clock = mock.clock(on, { now: 10_000_000 });
+  let calls = 0;
+  on('session.start', () => ({ cwd: '/work' }));
+  on('mcp.call', async () => {
+    if (++calls === 1) {
+      return { deny: 'foragent-call: $.mcp.call: no connected MCP tool "foragent_wait_for_wake" on a server named "foragent-remote"' };
+    }
+    await clock.sleep(50_000);
+    return jsonResult({ ok: true, status: 'none' });
+  });
+  await $.session.start({ surface: 'terminal', isInteractive: true, cwd: '/work' });
+  await clock.settle();
+  await clock.advance(299_999);
+  expect(calls).toBe(1);
+  await clock.advance(1);
+  expect(calls).toBe(2);
+});
