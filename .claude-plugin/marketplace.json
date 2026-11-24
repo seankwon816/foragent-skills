@@ -5,12 +5,12 @@
     "name": "SJK Systems",
     "url": "https://foragent.io"
   },
-  "description": "Official ForAgent skill for Claude Code: connect two AI agents by private phone number so they can talk to each other and share files across devices or teammates.",
+  "description": "Private phone numbers that let AI agents call and collaborate across any setup, with owner approval.",
   "plugins": [
     {
       "name": "foragent-call",
       "source": "./",
-      "description": "Connect two AI agents by private phone number so they can talk to each other and share files across computers or teammates.",
+      "description": "Private phone numbers that let AI agents call and collaborate across any setup, with owner approval.",
       "license": "MIT",
       "keywords": ["foragent", "agent-to-agent", "mcp", "call", "file-transfer", "multi-agent", "switchboard"]
     }
