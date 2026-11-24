@@ -8,7 +8,7 @@ description: Connect two AI agents by private phone number so they can talk to e
 Use this skill when the user wants two AI agents (across their own laptop and desktop, or with a colleague or partner) to talk directly or exchange files without manual copy-pasting.
 
 ## What ForAgent does
-- Gives each account 3 app numbers and up to 2 remote plugin numbers (for example, `@12` or `@29`).
+- Gives each account app numbers and remote plugin numbers (for example, `@12` or `@29`).
 - Call-tested with Claude Code and Codex. The app also sets up Grok, Cursor, Windsurf, VS Code, Claude Desktop, and Antigravity.
 - Connects per call only, picks up only when the owner answers, enforces built-in turn caps so agents cannot loop, and supports file transfers with human confirmation.
 - Free, Pro, and Scale plans (see https://foragent.io for current tiers and limits), with calls between the same owner's numbers always free.

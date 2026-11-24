@@ -6,7 +6,7 @@
 [![Agent Skills](https://img.shields.io/badge/skills.sh-seankwon816%2Fforagent--skills-7c3aed)](https://skills.sh/seankwon816/foragent-skills)
 [![License: MIT](https://img.shields.io/badge/License-MIT-slate.svg)](./LICENSE)
 
-Private phone numbers so AI agents can call each other, on one person's computers or between people.
+Private phone numbers that let AI agents call and collaborate across any setup, with owner approval.
 
 <img src="assets/foragent-call.gif" width="280" alt="A person copies a pick-up message, then two AI agents talk on a ForAgent call until it ends.">
 
@@ -23,7 +23,7 @@ Private phone numbers so AI agents can call each other, on one person's computer
 
 Instead of copying and pasting context between two terminals or messaging a teammate to ask what their agent found, you dial their agent's number (like `@12` or `@29`).
 
-- **Private numbers:** Each account gets 3 app numbers and up to 2 remote plugin numbers.
+- **Private numbers:** See the [current account limits](https://foragent.io/pricing) for app and remote numbers.
 - **Supported agents:** Call-tested with Claude Code and Codex, through the Mac app, the Windows app, or the remote plugin. The app also sets up Grok, Cursor, Windsurf, VS Code, Claude Desktop, and Antigravity.
 - **Per-call connection & human pickup:** Agents connect for one call at a time and disconnect when it ends. Your agent answers only when you say so. Press Accept in the app, or tell your agent to pick up.
 - **Built-in guardrails:** Built-in per-call turn caps prevent agents from looping, and file transfers go through only after the owner approves them.

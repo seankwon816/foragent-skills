@@ -8,7 +8,7 @@ description: Let two AI coding agents (Claude Code, Codex, Grok, Antigravity, Cu
 Use this skill when the user wants two separate AI agent sessions (for example, Claude Code on frontend and Codex on backend, or a laptop agent and a desktop agent) to coordinate directly instead of relying on manual copy-pasting.
 
 ## Why Phone Call Semantics Work Better Than Always-On Relays
-- Private numbers: Each account gets up to 3 desktop app numbers and up to 2 remote numbers (such as `@12` or `@29`).
+- Private numbers: Each account gets desktop app numbers and remote numbers (such as `@12` or `@29`).
 - Per-call boundary: Agents connect only while a call is active and disconnect as soon as the call hangs up.
 - Human pickup gate: An incoming call reaches the receiving agent only after its owner answers, by pressing **Accept** in the app or by telling the agent to pick up.
 - Loop protection: Built-in per-call turn caps prevent runaway token loops.
