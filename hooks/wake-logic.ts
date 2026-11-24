@@ -49,7 +49,10 @@ export function retryDelayMs(failures: number): number {
 export function wakeErrorRetryMs(message: string, failures: number): number | null {
   if (message === `MCP error -32602: Tool ${WAIT_FOR_WAKE_TOOL} not found`) return null;
   const missing = `$.mcp.call: no connected MCP tool "${WAIT_FOR_WAKE_TOOL}" on a server named "${FORAGENT_REMOTE_SERVER}"`;
-  if (message.includes(missing)) return 300_000;
+  if (message.includes(missing)) {
+    // Discovery may finish after session.start. The first 15 delays cover one 180-second ring.
+    return failures <= 15 ? retryDelayMs(failures) : 300_000;
+  }
   try {
     const payload = JSON.parse(message);
     if (payload?.ok === false && ['unauthorized', 'insufficient_scope', 'no_allowed_number'].includes(payload.error)) {
