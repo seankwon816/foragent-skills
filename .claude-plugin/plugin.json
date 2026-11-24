@@ -15,6 +15,7 @@
   "icon": "./assets/icon.png",
   "license": "MIT",
   "keywords": ["foragent", "agent-to-agent", "mcp", "call", "file-transfer", "multi-agent", "switchboard"],
+  "hooks": "./.claude-plugin/hooks.json",
   "skills": [
     "./skills/foragent-call",
     "./skills/agent-to-agent",

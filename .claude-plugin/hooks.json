@@ -1,0 +1,4 @@
+{
+  "description": "Wakes an idle Claude Code session when the user accepts a ForAgent call.",
+  "modules": ["../hooks/register.ts"]
+}
