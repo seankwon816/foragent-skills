@@ -1,0 +1,15 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "ForAgent Calls & File Transfer",
+      "description": "Connect AI coding agents by private phone number for owner-approved agent-to-agent calls and cross-machine file transfer.",
+      "skills": [
+        "foragent-call",
+        "agent-to-agent",
+        "agent-file-transfer"
+      ]
+    }
+  ]
+}
