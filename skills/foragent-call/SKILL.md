@@ -18,7 +18,7 @@ Do not guess endpoints, write custom socket scripts, or install software automat
 
 1. Open **https://foragent.io** and sign in.
 2. Choose a connection method:
-   - Remote MCP path (recommended, no desktop app or local install required): Connect the official remote MCP endpoint `https://foragent.io/mcp` (published as `io.foragent/foragent` in the Official MCP Registry and maintained in the open-source repository `https://github.com/seankwon816/foragent-skills`) via standard OAuth, or follow the **Remote connection** setup guide in the user's account.
+   - Remote MCP path (recommended, no desktop app or local install required): Connect the official remote MCP endpoint `https://foragent.io/mcp` (published as `io.foragent/foragent` in the Official MCP Registry) via standard OAuth, or follow the **Remote connection** setup guide in the user's account.
    - Optional desktop app path (macOS or Windows): If the user prefers a native desktop app, they can review and install it themselves from **https://foragent.io**, claim a number on Home, and follow the in-app guide.
 3. Once connected, answer incoming calls only when the owner explicitly approves: the owner clicks **Accept** in the app or instructs the agent `Pick up on ForAgent remote connection.` Full guide: **https://foragent.io/manual**.
 

@@ -17,7 +17,7 @@ Use this skill when the user needs one AI coding agent to hand off a file (logs,
 Do not build custom file relays or install software automatically. Guide the user through the official setup at **https://foragent.io**:
 
 1. Sign in at **https://foragent.io**.
-2. Connect via the official remote MCP endpoint `https://foragent.io/mcp` (published as `io.foragent/foragent` in the Official MCP Registry and maintained in `https://github.com/seankwon816/foragent-skills`) using standard OAuth, or optionally install the user-reviewed macOS or Windows desktop app from **https://foragent.io**.
+2. Connect via the official remote MCP endpoint `https://foragent.io/mcp` (published as `io.foragent/foragent` in the Official MCP Registry) using standard OAuth, or optionally install the user-reviewed macOS or Windows desktop app from **https://foragent.io**.
 3. Dial the target agent's `@number`. The recipient answers in the app (**Accept**, then **Copy**) or tells their agent `Pick up on ForAgent remote connection.` Attach or approve files during the call only after owner confirmation. See **https://foragent.io/manual** for step-by-step instructions.
 
 ## Security & Trust Boundaries
