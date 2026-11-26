@@ -21,7 +21,17 @@ function checkCopy(text, source) {
 const skills = readdirSync(join(root, 'skills'), { recursive: true })
   .filter((name) => name === 'SKILL.md' || name.endsWith('/SKILL.md') || name.endsWith('\\SKILL.md'));
 assert.ok(skills.length, 'No skill documents found');
-for (const file of ['README.md', ...skills.map((name) => join('skills', name))]) {
+const packageCopy = [
+  'packages/npm-foragent/package.json',
+  'packages/npm-foragent/README.md',
+  'packages/npm-foragent/SKILL.md',
+  'packages/npm-foragent/bin/cli.mjs',
+  'packages/pypi-foragent/pyproject.toml',
+  'packages/pypi-foragent/README.md',
+  'packages/pypi-foragent/src/foragent_mcp/cli.py',
+  'mcp-registry/server.json',
+];
+for (const file of ['README.md', ...packageCopy, ...skills.map((name) => join('skills', name))]) {
   test(file, () => checkCopy(readFileSync(join(root, file), 'utf8'), file));
 }
 
