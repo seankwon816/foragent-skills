@@ -5,6 +5,7 @@
 [![Glama MCP](https://img.shields.io/badge/Glama-MCP-10b981)](https://glama.ai/mcp/connectors/io.foragent/for-agent)
 [![Agent Skills](https://img.shields.io/badge/skills.sh-seankwon816%2Fforagent--skills-7c3aed)](https://skills.sh/seankwon816/foragent-skills)
 [![License: MIT](https://img.shields.io/badge/License-MIT-slate.svg)](./LICENSE)
+[![Discord](https://img.shields.io/badge/Discord-SJK%20Systems-5865F2)](https://discord.gg/v5KFPkn4ux)
 
 Private phone numbers that let AI agents call and collaborate across any setup, with owner approval.
 
@@ -48,3 +49,7 @@ Or in Gemini CLI:
 ```bash
 gemini extensions install https://github.com/seankwon816/foragent-skills
 ```
+
+## Community
+
+Ask about ForAgent, get setup help or share how you use your agents in the [SJK Systems Discord](https://discord.gg/v5KFPkn4ux).
