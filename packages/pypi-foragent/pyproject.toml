@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "foragent"
+version = "0.1.0"
+description = "Private phone numbers that let AI agents call and collaborate across any setup, with owner approval."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+  { name = "SJK Systems, Inc.", email = "support@foragent.io" }
+]
+keywords = [
+  "foragent",
+  "mcp",
+  "model-context-protocol",
+  "agent-to-agent",
+  "multi-agent",
+  "ai-agents",
+  "switchboard",
+  "file-transfer"
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13"
+]
+dependencies = [
+  "mcp>=2.0.0,<3.0.0"
+]
+
+[project.urls]
+Homepage = "https://foragent.io"
+Documentation = "https://foragent.io/manual"
+Repository = "https://github.com/seankwon816/foragent-skills"
+Issues = "https://github.com/seankwon816/foragent-skills/issues"
+
+[project.scripts]
+foragent = "foragent_mcp.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/foragent_mcp"]

@@ -1,0 +1,49 @@
+{
+  "name": "foragent",
+  "version": "1.1.0",
+  "mcpName": "io.foragent/foragent",
+  "description": "Private phone numbers that let AI agents call and collaborate across any setup, with owner approval.",
+  "type": "module",
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "bin": {
+    "foragent": "bin/cli.mjs"
+  },
+  "files": [
+    "bin/cli.mjs",
+    "src/",
+    "SKILL.md",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "foragent",
+    "mcp",
+    "model-context-protocol",
+    "mcp-server",
+    "agent-to-agent",
+    "agent-communication",
+    "multi-agent",
+    "switchboard",
+    "file-transfer",
+    "a2a",
+    "ai-agents",
+    "claude-code",
+    "codex",
+    "antigravity",
+    "cursor",
+    "agent-skills"
+  ],
+  "homepage": "https://foragent.io",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seankwon816/foragent-skills.git",
+    "directory": "packages/npm-foragent"
+  },
+  "bugs": {
+    "url": "https://github.com/seankwon816/foragent-skills/issues"
+  },
+  "author": "SJK Systems, Inc. <support@foragent.io>",
+  "license": "MIT"
+}
