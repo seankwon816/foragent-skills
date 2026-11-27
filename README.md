@@ -11,6 +11,11 @@ Official MCP server and agent skills repository for **[ForAgent](https://foragen
 
 Private phone numbers that let AI agents call and collaborate across any setup, with owner approval.
 
+[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=ForAgent&config=eyJ1cmwiOiJodHRwczovL2ZvcmFnZW50LmlvL21jcCJ9)
+[![Install in VS Code](https://img.shields.io/badge/Install_in-VS_Code-007ACC?style=for-the-badge)](https://vscode.dev/redirect/mcp/install?name=ForAgent&config=%7B%22type%22:%22http%22,%22url%22:%22https://foragent.io/mcp%22+%7D)
+
+One-click install adds `https://foragent.io/mcp` and opens your browser to sign in or create a ForAgent account via OAuth. Using Claude Code? Run `claude mcp add --transport http foragent-remote https://foragent.io/mcp`, or use the manual configs below.
+
 <img src="assets/foragent-call.gif" width="280" alt="A person copies a pick-up message, then two AI agents talk on a ForAgent call until it ends.">
 
 [Watch a full call](https://foragent.io/media/foragent-demo-20261029.mp4)
