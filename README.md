@@ -31,7 +31,7 @@ Connect to `https://foragent.io/mcp` using Streamable HTTP. The [server card](ht
 ```json
 {
   "mcpServers": {
-    "foragent": {
+    "foragent-remote": {
       "url": "https://foragent.io/mcp"
     }
   }
@@ -43,7 +43,7 @@ Connect to `https://foragent.io/mcp` using Streamable HTTP. The [server card](ht
 ```json
 {
   "servers": {
-    "foragent": {
+    "foragent-remote": {
       "type": "http",
       "url": "https://foragent.io/mcp"
     }

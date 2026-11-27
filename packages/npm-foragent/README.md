@@ -17,7 +17,7 @@ For stdio-only MCP hosts (or when using a package-based MCP directory), run the 
 ```json
 {
   "mcpServers": {
-    "foragent": {
+    "foragent-remote": {
       "command": "npx",
       "args": ["-y", "foragent"]
     }

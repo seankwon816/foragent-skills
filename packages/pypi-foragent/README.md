@@ -13,7 +13,7 @@ Run the stdio-to-Streamable-HTTP MCP bridge directly with `uvx`:
 ```json
 {
   "mcpServers": {
-    "foragent": {
+    "foragent-remote": {
       "command": "uvx",
       "args": ["foragent"]
     }
