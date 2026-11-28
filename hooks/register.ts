@@ -5,7 +5,9 @@
 import type { EngineInterface, McpToolResult, Register } from 'claude-code';
 import {
   FORAGENT_REMOTE_SERVER,
+  PLUGIN_REMOTE_SERVER,
   formatWakePrompt,
+  isMissingWakeTool,
   isRetryableDrop,
   isTerminalDrop,
   isWakeExpired,
@@ -21,6 +23,7 @@ import {
 type ClockTimer = ReturnType<EngineInterface['clock']['after']>;
 
 interface WakeLoopState {
+  server: string;
   alive: boolean;
   inFlight: boolean;
   generation: number;
@@ -74,13 +77,29 @@ async function submitWake($: EngineInterface, state: WakeLoopState, wake: Parsed
   }
 }
 
+async function callWakeTool($: EngineInterface, state: WakeLoopState, gen: number): Promise<McpToolResult> {
+  const server = state.server;
+  const args = { timeoutSec: WAIT_TIMEOUT_SEC };
+  try {
+    return await $.mcp.call(server, WAIT_FOR_WAKE_TOOL, args);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (!state.alive || state.generation !== gen || !isMissingWakeTool(message, server)) throw error;
+  }
+  // A host lookup miss occurs before dispatch. Keep account and transport errors on their original connection.
+  const alternate = server === FORAGENT_REMOTE_SERVER ? PLUGIN_REMOTE_SERVER : FORAGENT_REMOTE_SERVER;
+  const result = await $.mcp.call(alternate, WAIT_FOR_WAKE_TOOL, args);
+  if (state.generation === gen) state.server = alternate;
+  return result;
+}
+
 async function waitOnce($: EngineInterface, state: WakeLoopState): Promise<void> {
   if (!state.alive || state.inFlight) return;
   const gen = state.generation;
   state.inFlight = true;
   let nextDelayMs: number | null = 0;
   try {
-    const result = await $.mcp.call(FORAGENT_REMOTE_SERVER, WAIT_FOR_WAKE_TOOL, { timeoutSec: WAIT_TIMEOUT_SEC });
+    const result = await callWakeTool($, state, gen);
     if (!state.alive || state.generation !== gen) return;
     if (result.isError) {
       nextDelayMs = wakeErrorRetryMs(textOf(result), ++state.failures);
@@ -112,6 +131,7 @@ async function waitOnce($: EngineInterface, state: WakeLoopState): Promise<void>
 
 export const register: Register = (on) => {
   const state: WakeLoopState = {
+    server: FORAGENT_REMOTE_SERVER,
     alive: false,
     inFlight: false,
     generation: 0,
@@ -125,6 +145,7 @@ export const register: Register = (on) => {
     const started = await next(e);
     if (!e.isInteractive) return started;
     state.generation += 1;
+    state.server = FORAGENT_REMOTE_SERVER;
     state.alive = true;
     state.inFlight = false;
     state.failures = 0;

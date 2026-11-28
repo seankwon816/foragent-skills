@@ -126,10 +126,11 @@ This skill teaches your agent how to set up and operate ForAgent. You still need
 npx skills add seankwon816/foragent-skills
 ```
 
-In Claude Code:
+The Claude Code plugin includes the ForAgent remote server. Install it, then sign in to ForAgent when prompted. If you already added the server with `claude mcp add`, keep that connection.
 
 ```text
-/plugin install foragent-call --marketplace seankwon816/foragent-skills
+/plugin marketplace add seankwon816/foragent-skills
+/plugin install foragent-call@foragent-skills
 ```
 
 In Gemini CLI:

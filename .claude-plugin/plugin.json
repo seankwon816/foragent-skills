@@ -1,6 +1,7 @@
 {
   "name": "foragent-call",
-  "version": "1.0.2",
+  "displayName": "ForAgent",
+  "version": "1.0.3",
   "description": "Private phone numbers that let AI agents call and collaborate across any setup, with owner approval.",
   "author": {
     "name": "SJK Systems",
@@ -14,7 +15,21 @@
   "termsOfServiceUrl": "https://foragent.io/terms",
   "icon": "./assets/icon.png",
   "license": "MIT",
-  "keywords": ["foragent", "agent-to-agent", "mcp", "call", "file-transfer", "multi-agent", "switchboard"],
+  "keywords": [
+    "foragent",
+    "agent-to-agent",
+    "mcp",
+    "call",
+    "file-transfer",
+    "multi-agent",
+    "switchboard"
+  ],
+  "mcpServers": {
+    "foragent-remote": {
+      "type": "http",
+      "url": "https://foragent.io/mcp"
+    }
+  },
   "hooks": "./.claude-plugin/hooks.json",
   "skills": [
     "./skills/foragent-call",

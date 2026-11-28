@@ -470,41 +470,64 @@ test('confirmed access and tool errors stop polling until a new interactive sess
   }
 });
 
-test('a tool discovered just after startup is retried after one second', async ($, on) => {
+const manualServer = 'foragent-remote';
+const pluginServer = 'plugin:foragent-call:foragent-remote';
+
+function missingServer(server: string) {
+  return { deny: `foragent-call: $.mcp.call: no connected MCP tool "foragent_wait_for_wake" on a server named "${server}"` };
+}
+
+test('the plugin-only connection is found and reused after a manual lookup miss', async ($, on) => {
   const clock = mock.clock(on, { now: 10_000_000 });
-  let calls = 0;
+  const lookups: string[] = [];
   on('session.start', () => ({ cwd: '/work' }));
-  on('mcp.call', async () => {
-    if (++calls === 1) {
-      return { deny: 'foragent-call: $.mcp.call: no connected MCP tool "foragent_wait_for_wake" on a server named "foragent-remote"' };
-    }
+  on('mcp.call', async (_$, e) => {
+    lookups.push(e.server);
+    if (e.server === manualServer) return missingServer(e.server);
+    await clock.sleep(50_000);
+    return jsonResult({ ok: true, status: 'none' });
+  });
+  await $.session.start({ surface: 'terminal', isInteractive: true, cwd: '/work' });
+  await clock.settle();
+  await clock.advance(50_000);
+  expect(lookups).toEqual([manualServer, pluginServer, pluginServer]);
+});
+
+test('a manual tool discovered after both startup lookups is retried after one second', async ($, on) => {
+  const clock = mock.clock(on, { now: 10_000_000 });
+  const lookups: string[] = [];
+  on('session.start', () => ({ cwd: '/work' }));
+  on('mcp.call', async (_$, e) => {
+    lookups.push(e.server);
+    if (clock.now() < 10_001_000) return missingServer(e.server);
     await clock.sleep(50_000);
     return jsonResult({ ok: true, status: 'none' });
   });
   await $.session.start({ surface: 'terminal', isInteractive: true, cwd: '/work' });
   await clock.settle();
   await clock.advance(999);
-  expect(calls).toBe(1);
+  expect(lookups).toEqual([manualServer, pluginServer]);
   await clock.advance(1);
-  expect(calls).toBe(2);
+  expect(lookups).toEqual([manualServer, pluginServer, manualServer]);
 });
 
-test('a persistently missing host tool slows down after the first ringing window', async ($, on) => {
+test('persistently missing servers slow down after the first ringing window', async ($, on) => {
   const clock = mock.clock(on, { now: 10_000_000 });
-  let calls = 0;
+  const lookups: string[] = [];
   on('session.start', () => ({ cwd: '/work' }));
-  on('mcp.call', () => {
-    calls++;
-    return { deny: 'foragent-call: $.mcp.call: no connected MCP tool "foragent_wait_for_wake" on a server named "foragent-remote"' };
+  on('mcp.call', (_$, e) => {
+    lookups.push(e.server);
+    return missingServer(e.server);
   });
   await $.session.start({ surface: 'terminal', isInteractive: true, cwd: '/work' });
   await clock.settle();
   for (const delay of [1000, 2000, 4000, 8000, ...Array(11).fill(15000)]) {
     await clock.advance(delay);
   }
-  expect(calls).toBe(16);
+  const firstWindow = Array.from({ length: 16 }, () => [manualServer, pluginServer]).flat();
+  expect(lookups).toEqual(firstWindow);
   await clock.advance(299_999);
-  expect(calls).toBe(16);
+  expect(lookups).toEqual(firstWindow);
   await clock.advance(1);
-  expect(calls).toBe(17);
+  expect(lookups).toEqual([...firstWindow, manualServer, pluginServer]);
 });
