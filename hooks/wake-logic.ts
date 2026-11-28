@@ -3,6 +3,7 @@
  */
 
 export const FORAGENT_REMOTE_SERVER = 'foragent-remote';
+export const PLUGIN_REMOTE_SERVER = 'plugin:foragent-call:foragent-remote';
 export const WAIT_FOR_WAKE_TOOL = 'foragent_wait_for_wake';
 export const WAIT_TIMEOUT_SEC = 50;
 export const INITIAL_RETRY_MS = 1_000;
@@ -45,11 +46,14 @@ export function retryDelayMs(failures: number): number {
   return Math.min(MAX_RETRY_MS, INITIAL_RETRY_MS * 2 ** step);
 }
 
+export function isMissingWakeTool(message: string, server: string): boolean {
+  return message.includes(`$.mcp.call: no connected MCP tool "${WAIT_FOR_WAKE_TOOL}" on a server named "${server}"`);
+}
+
 /** A host with no connected tool may still finish connecting. A server denial is definitive for this session. */
 export function wakeErrorRetryMs(message: string, failures: number): number | null {
   if (message === `MCP error -32602: Tool ${WAIT_FOR_WAKE_TOOL} not found`) return null;
-  const missing = `$.mcp.call: no connected MCP tool "${WAIT_FOR_WAKE_TOOL}" on a server named "${FORAGENT_REMOTE_SERVER}"`;
-  if (message.includes(missing)) {
+  if (isMissingWakeTool(message, FORAGENT_REMOTE_SERVER) || isMissingWakeTool(message, PLUGIN_REMOTE_SERVER)) {
     // Discovery may finish after session.start. The first 15 delays cover one 180-second ring.
     return failures <= 15 ? retryDelayMs(failures) : 300_000;
   }
